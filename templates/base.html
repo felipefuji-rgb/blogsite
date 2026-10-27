@@ -16,6 +16,7 @@
     <header>
         <a href="{% url 'posts:index' %}">Início</a>
         <a href="{% url 'posts:create' %}">Novo post</a>
+        <a href="{% url 'posts:categories' %}">Categorias</a>
     </header>
     <main>
         {% block content %}{% endblock %}
