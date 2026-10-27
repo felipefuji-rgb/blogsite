@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+<h1>Posts</h1>
+<p><a href="{% url 'posts:create' %}">Criar novo post</a></p>
+{% if post_list %}
+<ul>
+    {% for post in post_list %}
+    <li>
+        <a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a>
+        <span class="data">({{ post.date|date:"d/m/Y H:i" }})</span>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nenhum post ainda.</p>
+{% endif %}
+{% endblock %}

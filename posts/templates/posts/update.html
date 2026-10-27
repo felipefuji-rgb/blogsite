@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar: {{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>Editar post</h1>
+<form action="{% url 'posts:update' post.id %}" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="title">Título</label><br>
+        <input type="text" id="title" name="title" size="60" value="{{ post.title }}">
+    </p>
+    <p>
+        <label for="content">Conteúdo (HTML)</label><br>
+        <textarea id="content" name="content" rows="12" cols="60">{{ post.content }}</textarea>
+    </p>
+    <button type="submit">Salvar</button>
+</form>
+<p><a href="{% url 'posts:detail' post.id %}">Cancelar</a></p>
+{% endblock %}
