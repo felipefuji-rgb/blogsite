@@ -6,14 +6,7 @@
 <h1>Novo post</h1>
 <form action="{% url 'posts:create' %}" method="post">
     {% csrf_token %}
-    <p>
-        <label for="title">Título</label><br>
-        <input type="text" id="title" name="title" size="60">
-    </p>
-    <p>
-        <label for="content">Conteúdo (HTML)</label><br>
-        <textarea id="content" name="content" rows="12" cols="60"></textarea>
-    </p>
+    {{ form.as_p }}
     <button type="submit">Criar</button>
 </form>
 {% endblock %}
