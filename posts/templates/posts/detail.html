@@ -13,4 +13,26 @@
     <a href="{% url 'posts:delete' post.id %}">Remover</a> |
     <a href="{% url 'posts:index' %}">Voltar para a lista</a>
 </p>
+
+<hr>
+<h2>Comentários</h2>
+
+<form action="{% url 'posts:comment' post.id %}" method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Comentar</button>
+</form>
+<p><a href="{% url 'posts:comment' post.id %}">Abrir a página de novo comentário</a></p>
+
+{% for comment in post.comment_set.all %}
+<div>
+    <p>
+        <strong>{{ comment.author.username }}</strong>
+        <span class="data">em {{ comment.date|date:"d/m/Y H:i" }}</span>
+    </p>
+    <p>{{ comment.text|linebreaksbr }}</p>
+</div>
+{% empty %}
+<p>Nenhum comentário ainda.</p>
+{% endfor %}
 {% endblock %}
