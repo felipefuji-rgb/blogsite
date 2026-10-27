@@ -5,6 +5,13 @@
 {% block content %}
 <h1>{{ post.title }}</h1>
 <p class="data">Publicado em {{ post.date|date:"d/m/Y H:i" }}</p>
+{% if post.categories.all %}
+<p>Categorias:
+    {% for category in post.categories.all %}
+    <a href="{% url 'posts:category' category.id %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+{% endif %}
 <div class="post-content">
     {{ post.content|safe }}
 </div>
