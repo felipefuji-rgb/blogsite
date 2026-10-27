@@ -1,52 +1,40 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views import generic
 
 from .forms import PostForm
 from .models import Post
 
 
-def list_posts(request):
-    post_list = Post.objects.order_by('-date')
-    context = {'post_list': post_list}
-    return render(request, 'posts/index.html', context)
+class PostListView(generic.ListView):
+    model = Post
+    template_name = 'posts/index.html'
+    ordering = ['-date']
 
 
-def detail_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    context = {'post': post}
-    return render(request, 'posts/detail.html', context)
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = 'posts/detail.html'
 
 
-def create_post(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save()
-            return HttpResponseRedirect(reverse('posts:detail', args=(post.id, )))
-    else:
-        form = PostForm()
-    context = {'form': form}
-    return render(request, 'posts/create.html', context)
+class PostCreateView(generic.CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/create.html'
+
+    def get_success_url(self):
+        return reverse('posts:detail', args=(self.object.id, ))
 
 
-def update_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('posts:detail', args=(post.id, )))
-    else:
-        form = PostForm(instance=post)
-    context = {'post': post, 'form': form}
-    return render(request, 'posts/update.html', context)
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/update.html'
+
+    def get_success_url(self):
+        return reverse('posts:detail', args=(self.object.id, ))
 
 
-def delete_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    if request.method == 'POST':
-        post.delete()
-        return HttpResponseRedirect(reverse('posts:index'))
-    context = {'post': post}
-    return render(request, 'posts/delete.html', context)
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    template_name = 'posts/delete.html'
+    success_url = reverse_lazy('posts:index')
